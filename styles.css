@@ -148,7 +148,11 @@ body.nav-open{overflow:hidden}
 /* ---------- Listings ---------- */
 .listings{padding:76px 0}
 .listings-top{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:24px}
+.listings-top-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .result-count{font-size:.84rem;color:var(--muted)}
+.fav-toggle{display:inline-flex;align-items:center;gap:7px}
+.fav-toggle svg{width:15px;height:15px}
+.fav-toggle.active{background:var(--orange);border-color:var(--orange);color:#fff}
 
 .chips{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;overflow-x:auto;padding-bottom:2px}
 .chip{border:1.5px solid var(--border);background:#fff;color:var(--ink);padding:10px 18px;border-radius:999px;font-family:'Montserrat',sans-serif;font-size:.76rem;font-weight:700;transition:.18s ease;flex-shrink:0}
@@ -165,6 +169,7 @@ body.nav-open{overflow:hidden}
 @media(min-width:960px){.card-grid{grid-template-columns:repeat(3,1fr)}}
 
 .property-card{background:#fff;border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);border:1px solid var(--border);display:flex;flex-direction:column;transition:transform .22s ease,box-shadow .22s ease}
+.property-photo-wrap{position:relative}
 .property-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg)}
 .property-photo{position:relative;aspect-ratio:4/3;background:var(--bg-soft-2);overflow:hidden}
 .property-photo img{width:100%;height:100%;object-fit:cover;transition:transform .35s ease}
@@ -172,6 +177,10 @@ body.nav-open{overflow:hidden}
 .property-photo-link{display:block}
 .property-tag{position:absolute;top:13px;left:13px;background:#fff;color:var(--navy);font-family:'Montserrat',sans-serif;font-size:.64rem;font-weight:700;letter-spacing:.02em;padding:6px 13px;border-radius:999px;box-shadow:var(--shadow-sm)}
 .property-code{position:absolute;top:13px;right:13px;background:rgba(30,32,51,.55);color:#fff;font-size:.62rem;font-weight:600;padding:5px 10px;border-radius:999px;letter-spacing:.03em}
+.fav-btn{position:absolute;bottom:13px;right:13px;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.92);border:none;display:flex;align-items:center;justify-content:center;color:var(--navy);cursor:pointer;box-shadow:var(--shadow-sm);transition:transform .15s ease,color .2s ease}
+.fav-btn:hover{transform:scale(1.08)}
+.fav-btn.is-fav{color:var(--orange)}
+.fav-btn svg{width:18px;height:18px}
 .property-body{padding:19px 21px 22px;display:flex;flex-direction:column;flex:1}
 .property-price{font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.28rem;color:var(--navy)}
 .property-name{font-weight:700;font-size:.94rem;color:var(--ink);margin:6px 0 3px;line-height:1.4;display:block}
@@ -269,6 +278,10 @@ body.nav-open{overflow:hidden}
 .pd-loc{color:var(--muted);font-size:.98rem;margin-top:6px;display:flex;align-items:center;gap:6px}
 .pd-price-row{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:18px}
 .pd-price{font-family:'Montserrat',sans-serif;font-weight:800;font-size:clamp(1.6rem,3vw,2.1rem);color:var(--navy)}
+.pd-fav-btn{display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--border);background:#fff;color:var(--ink);padding:10px 18px;border-radius:999px;font-family:'Montserrat',sans-serif;font-size:.8rem;font-weight:700;cursor:pointer;transition:.18s ease}
+.pd-fav-btn svg{width:16px;height:16px}
+.pd-fav-btn:hover{border-color:var(--orange)}
+.pd-fav-btn.is-fav{background:var(--orange);border-color:var(--orange);color:#fff}
 .pd-tag{display:inline-block;background:var(--bg-soft-2);color:var(--navy);font-family:'Montserrat',sans-serif;font-size:.7rem;font-weight:700;padding:6px 14px;border-radius:999px;margin-bottom:10px}
 
 /* Gallery */

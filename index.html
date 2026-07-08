@@ -174,7 +174,13 @@
           <h2>Imóveis <em>à venda</em></h2>
           <p>Filtre por tipo, cidade, quartos e valor. Todos com acompanhamento pessoal do Wendy.</p>
         </div>
-        <span class="result-count" id="resultCount"></span>
+        <div class="listings-top-actions">
+          <button type="button" id="favToggleBtn" class="chip fav-toggle">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+            <span id="favCount">0</span> favoritos
+          </button>
+          <span class="result-count" id="resultCount"></span>
+        </div>
       </div>
 
       <div class="chips" id="chips"></div>
@@ -381,7 +387,20 @@
     a: '<svg class="spec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>'
   };
 
-  var state = { tipo:"", cidade:"", quartos:"", valor:"", ordenar:"", page:1 };
+  var FAV_KEY = 'wendyFavoritos';
+  function getFavorites(){
+    try { return JSON.parse(localStorage.getItem(FAV_KEY) || '[]'); } catch(e){ return []; }
+  }
+  function isFavorite(code){ return getFavorites().indexOf(code) !== -1; }
+  function toggleFavorite(code){
+    var favs = getFavorites();
+    var i = favs.indexOf(code);
+    if(i === -1) favs.push(code); else favs.splice(i,1);
+    localStorage.setItem(FAV_KEY, JSON.stringify(favs));
+    return favs;
+  }
+
+  var state = { tipo:"", cidade:"", quartos:"", valor:"", ordenar:"", page:1, onlyFav:false };
   var PAGE_SIZE = 9;
 
   var els = {
@@ -391,6 +410,8 @@
     count: document.getElementById('resultCount'),
     loadMoreWrap: document.getElementById('loadMoreWrap'),
     loadMoreBtn: document.getElementById('loadMoreBtn'),
+    favToggleBtn: document.getElementById('favToggleBtn'),
+    favCount: document.getElementById('favCount'),
     fCidade: document.getElementById('fCidade'),
     fQuartos: document.getElementById('fQuartos'),
     fValor: document.getElementById('fValor'),
@@ -445,6 +466,7 @@
         if(state.valor === "99999999"){ if(im.p <= 1200000) return false; }
         else if(im.p > Number(state.valor)) return false;
       }
+      if(state.onlyFav && !isFavorite(im.c)) return false;
       return true;
     });
     if(state.ordenar === "menor") list = list.slice().sort(function(a,b){ return (a.p==null?Infinity:a.p) - (b.p==null?Infinity:b.p); });
@@ -462,15 +484,19 @@
     var gal = (im.imgs && im.imgs.length) ? im.imgs : (im.f ? [im.f] : []);
     var foto = gal.length ? (FOTO_BASE + gal[0]) : PLACEHOLDER;
     var href = 'imoveis/' + im.c + '.html';
+    var isFav = isFavorite(im.c);
     return (
       '<article class="property-card">' +
-        '<a class="property-photo-link" href="' + href + '">' +
-          '<div class="property-photo">' +
-            '<img src="' + foto + '" alt="' + im.n + '" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=\'' + PLACEHOLDER + '\'">' +
-            '<span class="property-tag">' + im.t + '</span>' +
-            '<span class="property-code">cód. ' + im.c + '</span>' +
-          '</div>' +
-        '</a>' +
+        '<div class="property-photo-wrap">' +
+          '<a class="property-photo-link" href="' + href + '">' +
+            '<div class="property-photo">' +
+              '<img src="' + foto + '" alt="' + im.n + '" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=\'' + PLACEHOLDER + '\'">' +
+              '<span class="property-tag">' + im.t + '</span>' +
+              '<span class="property-code">cód. ' + im.c + '</span>' +
+            '</div>' +
+          '</a>' +
+          '<button type="button" class="fav-btn' + (isFav ? ' is-fav' : '') + '" data-fav="' + im.c + '" aria-label="' + (isFav ? 'Remover dos favoritos' : 'Adicionar aos favoritos') + '"><svg viewBox="0 0 24 24" fill="' + (isFav ? 'currentColor' : 'none') + '" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></button>' +
+        '</div>' +
         '<div class="property-body">' +
           '<span class="property-price">' + fmtPrice(im.p) + '</span>' +
           '<a class="property-name" href="' + href + '">' + im.n + '</a>' +
@@ -497,6 +523,8 @@
       els.grid.innerHTML = visible.map(cardHtml).join('');
       els.loadMoreWrap.style.display = (visible.length < list.length) ? 'flex' : 'none';
     }
+    els.favCount.textContent = getFavorites().length;
+    els.favToggleBtn.classList.toggle('active', state.onlyFav);
   }
 
   els.fCidade.addEventListener('change', function(){ state.cidade = this.value; state.page = 1; update(); });
@@ -504,6 +532,14 @@
   els.fValor.addEventListener('change', function(){ state.valor = this.value; els.heroValor.value = this.value; state.page = 1; update(); });
   els.fOrdenar.addEventListener('change', function(){ state.ordenar = this.value; state.page = 1; update(); });
   els.loadMoreBtn.addEventListener('click', function(){ state.page++; update(); });
+  els.favToggleBtn.addEventListener('click', function(){ state.onlyFav = !state.onlyFav; state.page = 1; update(); });
+  els.grid.addEventListener('click', function(e){
+    var btn = e.target.closest('.fav-btn');
+    if(!btn) return;
+    e.preventDefault();
+    toggleFavorite(btn.getAttribute('data-fav'));
+    update();
+  });
 
   document.getElementById('heroSearch').addEventListener('submit', function(e){
     e.preventDefault();

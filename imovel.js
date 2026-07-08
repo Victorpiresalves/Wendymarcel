@@ -25,6 +25,20 @@
     a: '<svg class="spec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>'
   };
 
+  var FAV_KEY = 'wendyFavoritos';
+  function getFavorites(){
+    try { return JSON.parse(localStorage.getItem(FAV_KEY) || '[]'); } catch(e){ return []; }
+  }
+  function isFavorite(code){ return getFavorites().indexOf(code) !== -1; }
+  function toggleFavorite(code){
+    var favs = getFavorites();
+    var i = favs.indexOf(code);
+    if(i === -1) favs.push(code); else favs.splice(i,1);
+    localStorage.setItem(FAV_KEY, JSON.stringify(favs));
+    return favs;
+  }
+  var HEART_PATH = 'M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z';
+
   function galleryOf(im){
     if(im.imgs && im.imgs.length) return im.imgs;
     if(im.f) return [im.f];
@@ -40,15 +54,19 @@
     var msg = encodeURIComponent('Olá Wendy! Tenho interesse no imóvel ' + im.n + ' (cód. ' + im.c + '). Pode me passar mais informações?');
     var gal = galleryOf(im);
     var foto = gal.length ? (FOTO_BASE + gal[0]) : PLACEHOLDER;
+    var isFav = isFavorite(im.c);
     return (
       '<article class="property-card">' +
-        '<a class="property-photo-link" href="' + im.c + '.html">' +
-          '<div class="property-photo">' +
-            '<img src="' + foto + '" alt="' + im.n + '" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=\'' + PLACEHOLDER + '\'">' +
-            '<span class="property-tag">' + im.t + '</span>' +
-            '<span class="property-code">cód. ' + im.c + '</span>' +
-          '</div>' +
-        '</a>' +
+        '<div class="property-photo-wrap">' +
+          '<a class="property-photo-link" href="' + im.c + '.html">' +
+            '<div class="property-photo">' +
+              '<img src="' + foto + '" alt="' + im.n + '" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=\'' + PLACEHOLDER + '\'">' +
+              '<span class="property-tag">' + im.t + '</span>' +
+              '<span class="property-code">cód. ' + im.c + '</span>' +
+            '</div>' +
+          '</a>' +
+          '<button type="button" class="fav-btn' + (isFav ? ' is-fav' : '') + '" data-fav="' + im.c + '" aria-label="' + (isFav ? 'Remover dos favoritos' : 'Adicionar aos favoritos') + '"><svg viewBox="0 0 24 24" fill="' + (isFav ? 'currentColor' : 'none') + '" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="' + HEART_PATH + '"/></svg></button>' +
+        '</div>' +
         '<div class="property-body">' +
           '<span class="property-price">' + fmtPrice(im.p) + '</span>' +
           '<a class="property-name" href="' + im.c + '.html">' + im.n + '</a>' +
@@ -113,7 +131,9 @@
             '<span class="pd-code">cód. ' + im.c + '</span>' +
           '</div>' +
           '<div class="pd-loc"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>' + im.l + '</div>' +
-          '<div class="pd-price-row"><span class="pd-price">' + fmtPrice(im.p) + '</span></div>' +
+          '<div class="pd-price-row"><span class="pd-price">' + fmtPrice(im.p) + '</span>' +
+            '<button type="button" id="pdFavBtn" class="pd-fav-btn' + (isFavorite(im.c) ? ' is-fav' : '') + '" aria-label="' + (isFavorite(im.c) ? 'Remover dos favoritos' : 'Adicionar aos favoritos') + '"><svg viewBox="0 0 24 24" fill="' + (isFavorite(im.c) ? 'currentColor' : 'none') + '" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="' + HEART_PATH + '"/></svg> Favoritar</button>' +
+          '</div>' +
         '</header>' +
 
         '<div class="pd-gallery">' +
@@ -154,6 +174,16 @@
           '</aside>' +
         '</div>' +
       '</div>';
+
+    // Favorite button
+    var pdFavBtn = document.getElementById('pdFavBtn');
+    if(pdFavBtn) pdFavBtn.addEventListener('click', function(){
+      toggleFavorite(im.c);
+      var fav = isFavorite(im.c);
+      pdFavBtn.classList.toggle('is-fav', fav);
+      pdFavBtn.setAttribute('aria-label', fav ? 'Remover dos favoritos' : 'Adicionar aos favoritos');
+      pdFavBtn.querySelector('svg').setAttribute('fill', fav ? 'currentColor' : 'none');
+    });
 
     // Gallery interactions
     var mainImg = document.getElementById('pdMainImg');
@@ -228,6 +258,16 @@
     var relatedGrid = document.getElementById('relatedGrid');
     if(relatedGrid && related.length){
       relatedGrid.innerHTML = related.map(cardHtml).join('');
+      relatedGrid.addEventListener('click', function(e){
+        var btn = e.target.closest('.fav-btn');
+        if(!btn) return;
+        e.preventDefault();
+        toggleFavorite(btn.getAttribute('data-fav'));
+        var fav = isFavorite(btn.getAttribute('data-fav'));
+        btn.classList.toggle('is-fav', fav);
+        btn.setAttribute('aria-label', fav ? 'Remover dos favoritos' : 'Adicionar aos favoritos');
+        btn.querySelector('svg').setAttribute('fill', fav ? 'currentColor' : 'none');
+      });
     } else {
       var relatedSection = document.getElementById('relatedSection');
       if(relatedSection) relatedSection.style.display = 'none';
