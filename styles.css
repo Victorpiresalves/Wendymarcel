@@ -241,6 +241,44 @@ body.nav-open{overflow:hidden}
 .sim-result small{color:var(--muted);font-size:.78rem;display:block;margin-top:6px;line-height:1.5}
 @media(min-width:1024px){.financing-grid{grid-template-columns:1fr .85fr}}
 
+/* ---------- Lead capture ---------- */
+.leads{padding:80px 0;background:var(--bg-soft)}
+.leads-grid{display:grid;gap:44px;align-items:start}
+.leads h2 em{font-style:normal;color:var(--orange)}
+.leads-lead{color:var(--muted);margin-top:12px;max-width:480px}
+.leads-perks{margin-top:26px;display:grid;gap:12px}
+.leads-perks li{display:flex;align-items:center;gap:10px;font-size:.88rem;color:var(--ink)}
+.leads-perks svg{width:18px;height:18px;color:var(--orange);flex-shrink:0}
+@media(min-width:1024px){.leads-grid{grid-template-columns:1fr .85fr}}
+
+.lead-card{background:#fff;border-radius:var(--radius-md);padding:30px;box-shadow:var(--shadow-lg)}
+.lead-field{margin-bottom:16px}
+.lead-field label{display:block;font-family:'Montserrat',sans-serif;font-size:.64rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.lead-field input,.lead-field select,.lead-field textarea{width:100%;border:1.5px solid var(--border);border-radius:12px;padding:13px 14px;font-size:.92rem;background:var(--bg-soft-2);color:var(--ink);font-family:inherit}
+.lead-field textarea{resize:vertical;min-height:80px}
+.lead-field input:focus,.lead-field select:focus,.lead-field textarea:focus{border-color:var(--navy);background:#fff;outline:none}
+.lead-honeypot{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.lead-consent{font-size:.7rem;color:var(--muted);margin-top:12px;line-height:1.5}
+.lead-consent a{color:var(--navy);text-decoration:underline}
+.lead-result{margin-top:14px;font-size:.84rem;line-height:1.5;display:none;border-radius:10px;padding:12px 14px}
+.lead-result[data-state="success"]{display:block;color:#1a7f37;background:#eaf7ee}
+.lead-result[data-state="error"]{display:block;color:#b42318;background:#fdecec}
+
+.lead-modal-overlay{position:fixed;inset:0;z-index:95;background:rgba(15,17,38,.55);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .25s ease}
+.lead-modal-overlay.is-visible{opacity:1;pointer-events:auto}
+.lead-modal{background:#fff;border-radius:var(--radius-lg);padding:34px 28px 28px;max-width:440px;width:100%;position:relative;box-shadow:var(--shadow-lg);transform:translateY(14px);transition:transform .25s ease;max-height:90vh;overflow-y:auto}
+.lead-modal-overlay.is-visible .lead-modal{transform:translateY(0)}
+.lead-modal-close{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;border:none;background:var(--bg-soft-2);color:var(--ink);font-size:1.4rem;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s ease}
+.lead-modal-close:hover{background:var(--border)}
+.lead-modal h3{margin-top:10px;font-size:1.25rem}
+.lead-modal p{color:var(--muted);margin-top:8px;margin-bottom:22px;font-size:.88rem;line-height:1.5}
+.lead-modal .lead-card{padding:0;box-shadow:none}
+
+.pd-lead-toggle{display:inline-flex;align-items:center;gap:6px;margin-top:14px;background:none;border:none;color:var(--navy);font-family:'Montserrat',sans-serif;font-size:.78rem;font-weight:700;cursor:pointer;text-decoration:underline;padding:0}
+.pd-lead-form{margin-top:16px;display:none}
+.pd-lead-form.is-open{display:block}
+.pd-lead-form .lead-card{padding:0;box-shadow:none}
+
 /* ---------- Footer ---------- */
 .site-footer{background:var(--navy-dark);color:rgba(255,255,255,.68);padding:64px 0 28px;font-size:.88rem}
 .footer-grid{display:grid;gap:40px;grid-template-columns:1fr;margin-bottom:44px}

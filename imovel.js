@@ -170,10 +170,23 @@
                 '<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Ajuda com simulação de financiamento</li>' +
                 '<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Mais de 10 anos em Birigui e região</li>' +
               '</ul>' +
+              '<button type="button" class="pd-lead-toggle" id="pdLeadToggle">Prefere que a gente te ligue? Deixe seus dados</button>' +
+              '<div class="pd-lead-form" id="pdLeadFormWrap"><form id="pdLeadForm"></form></div>' +
             '</div>' +
           '</aside>' +
         '</div>' +
       '</div>';
+
+    // Lead form toggle
+    var pdLeadToggle = document.getElementById('pdLeadToggle');
+    var pdLeadFormWrap = document.getElementById('pdLeadFormWrap');
+    if(pdLeadToggle) pdLeadToggle.addEventListener('click', function(){
+      var isOpen = pdLeadFormWrap.classList.toggle('is-open');
+      if(isOpen && window.wendyMountLeadForm){
+        window.wendyMountLeadForm(document.getElementById('pdLeadForm'), 'Imóvel ' + im.c + ' - ' + im.n, true);
+      }
+      pdLeadToggle.style.display = isOpen ? 'none' : 'inline-flex';
+    });
 
     // Favorite button
     var pdFavBtn = document.getElementById('pdFavBtn');

@@ -233,6 +233,23 @@
     </div>
   </section>
 
+  <!-- CAPTAÇÃO DE LEADS -->
+  <section id="leads" class="leads">
+    <div class="container leads-grid">
+      <div>
+        <span class="eyebrow">Não encontrou o imóvel ideal?</span>
+        <h2>Deixe seus dados e <em>a gente te avisa</em></h2>
+        <p class="leads-lead">Conte o que você procura e o Wendy separa pessoalmente as melhores opções para você — muitas vezes antes de irem para o site.</p>
+        <ul class="leads-perks">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Atendimento pessoal, sem call center</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Você é avisado antes de novos imóveis irem para o site</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Seus dados usados só para contato comercial</li>
+        </ul>
+      </div>
+      <form class="lead-card" id="leadFormHome"></form>
+    </div>
+  </section>
+
   <!-- DEPOIMENTOS -->
   <section class="testimonials">
     <div class="container">
@@ -360,6 +377,7 @@
 
 <script src="imoveis-data.js"></script>
 <script src="cookie-consent.js"></script>
+<script src="lead-form.js"></script>
 <script>
 (function(){
   "use strict";
@@ -572,6 +590,9 @@
   document.getElementById('statTotal2').textContent = IMOVEIS.length;
 
   update();
+
+  // ---------- Lead capture ----------
+  if(window.wendyMountLeadForm) window.wendyMountLeadForm(document.getElementById('leadFormHome'), 'Home - Seção de captação');
 
   // ---------- Financing simulator ----------
   document.getElementById('simForm').addEventListener('submit', function(e){
