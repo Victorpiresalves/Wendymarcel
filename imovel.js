@@ -1,7 +1,7 @@
 (function(){
   "use strict";
 
-  var FOTO_BASE = "https://wendymarcel.com.br/fotos/";
+  var FOTO_BASE = "../fotos/";
   var WPP = "5518997078784";
 
   var currency = new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL',minimumFractionDigits:0,maximumFractionDigits:0});
@@ -78,7 +78,7 @@
     var ogDesc = document.querySelector('meta[property="og:description"]');
     if(ogDesc) ogDesc.setAttribute('content', shortDesc);
     var ogImg = document.querySelector('meta[property="og:image"]');
-    if(ogImg) ogImg.setAttribute('content', gallery[0]);
+    if(ogImg) ogImg.setAttribute('content', window.location.origin + gallery[0].replace('..',''));
 
     var waMsg = encodeURIComponent('Olá Wendy! Tenho interesse no imóvel ' + im.n + ' (cód. ' + im.c + '). Pode me passar mais informações?');
     var waLink = 'https://wa.me/' + WPP + '?text=' + waMsg;

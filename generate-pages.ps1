@@ -3,7 +3,7 @@ $root = "C:\Projetos\wendymarcel"
 $json = [System.IO.File]::ReadAllText("$root\imoveis-data.json", [System.Text.Encoding]::UTF8)
 $data = $json | ConvertFrom-Json
 $template = [System.IO.File]::ReadAllText("$root\imovel-template.html", [System.Text.Encoding]::UTF8)
-$fotoBase = "https://wendymarcel.com.br/fotos/"
+$fotoBase = "https://wendy-marcel.pages.dev/fotos/"
 
 # NOTE: must be "var", not "const"/"let" - top-level const/let in a classic
 # script does not attach to window, and imovel.js reads window.IMOVEIS.
