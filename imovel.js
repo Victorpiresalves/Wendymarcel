@@ -161,7 +161,7 @@
             '<div class="pd-agent-card">' +
               '<div class="pd-agent-top">' +
                 '<img class="pd-agent-photo" src="../corretor.jpg" alt="Wendy Marcel">' +
-                '<div><div class="pd-agent-name">Wendy Marcel</div><div class="pd-agent-creci">CRECI 239577-F</div></div>' +
+                '<div><div class="pd-agent-name">Wendy Marcel</div><div class="pd-agent-creci"><svg class="creci-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 L20 6 V12 C20 17 16.5 20.5 12 22 C7.5 20.5 4 17 4 12 V6 Z"/><polyline points="9 12 11 14 15 9.5"/></svg>CRECI 239577-F</div></div>' +
               '</div>' +
               '<a class="btn btn-accent btn-block" href="' + waLink + '" target="_blank" rel="noopener">Falar no WhatsApp</a>' +
               '<a class="btn btn-outline btn-block" style="margin-top:10px" href="tel:+5518997329591">Ligar agora</a>' +
