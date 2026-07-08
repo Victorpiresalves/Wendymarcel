@@ -4,6 +4,31 @@ $json = [System.IO.File]::ReadAllText("$root\imoveis-data.json", [System.Text.En
 $data = $json | ConvertFrom-Json
 $template = [System.IO.File]::ReadAllText("$root\imovel-template.html", [System.Text.Encoding]::UTF8)
 $fotoBase = "https://wendy-marcel.pages.dev/fotos/"
+$siteBase = "https://wendy-marcel.pages.dev"
+$inicioLabel = "In" + [char]0x00ED + "cio"
+$middot = [char]0x00B7
+
+function CidadeDe($l) {
+  if ($l.Contains($middot)) {
+    $parts = $l.Split($middot)
+    $last = $parts[$parts.Count - 1].Trim()
+  } else {
+    $last = $l.Trim()
+  }
+  $last = $last -replace "/SP\s*$", ""
+  return $last.Trim()
+}
+
+function JsonEscape($s) {
+  if ($null -eq $s) { return "" }
+  $s = $s.Replace('\', '\\')
+  $s = $s.Replace('"', '\"')
+  $s = $s.Replace("`r`n", ' ')
+  $s = $s.Replace("`n", ' ')
+  $s = $s.Replace("`r", ' ')
+  $s = $s.Replace('</', '<\/')
+  return $s
+}
 
 # NOTE: must be "var", not "const"/"let" - top-level const/let in a classic
 # script does not attach to window, and imovel.js reads window.IMOVEIS.
@@ -32,11 +57,45 @@ foreach ($im in $data) {
   $firstImg = if ($im.imgs -and $im.imgs.Count -gt 0) { $im.imgs[0] } elseif ($im.f) { $im.f -replace '^thumb-','' } else { "" }
   $ogImage = HtmlEscape($fotoBase + $firstImg)
 
+  $pageUrl = "$siteBase/imoveis/$($im.c).html"
+  $cidade = CidadeDe($im.l)
+
+  $imgUrls = @()
+  if ($im.imgs -and $im.imgs.Count -gt 0) {
+    foreach ($g in $im.imgs) { $imgUrls += ($fotoBase + $g) }
+  } elseif ($im.f) {
+    $imgUrls += ($fotoBase + $firstImg)
+  }
+  $imgJson = "[" + (($imgUrls | ForEach-Object { '"' + (JsonEscape($_)) + '"' }) -join ",") + "]"
+
+  $descForLd = if ($im.d) { $im.d } else { "$($im.t) em $($im.l)." }
+
+  $geoJson = ""
+  if ($im.lat -and $im.lng) {
+    $geoJson = ',"geo":{"@type":"GeoCoordinates","latitude":' + $im.lat + ',"longitude":' + $im.lng + '}'
+  }
+
+  $roomsJson = ""
+  if ($im.q) { $roomsJson += ',"numberOfRooms":' + $im.q }
+  if ($im.b) { $roomsJson += ',"numberOfBathroomsTotal":' + $im.b }
+
+  $offersJson = ""
+  if ($null -ne $im.p) {
+    $offersJson = ',"offers":{"@type":"Offer","price":' + $im.p + ',"priceCurrency":"BRL","availability":"https://schema.org/InStock","url":"' + (JsonEscape($pageUrl)) + '"}'
+  }
+
+  $listingLd = '{"@type":"RealEstateListing","@id":"' + (JsonEscape($pageUrl)) + '","name":"' + (JsonEscape($im.n)) + '","description":"' + (JsonEscape($descForLd)) + '","url":"' + (JsonEscape($pageUrl)) + '","image":' + $imgJson + ',"address":{"@type":"PostalAddress","addressLocality":"' + (JsonEscape($cidade)) + '","addressRegion":"SP","addressCountry":"BR"}' + $geoJson + $roomsJson + $offersJson + '}'
+
+  $breadcrumbLd = '{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"' + (JsonEscape($inicioLabel)) + '","item":"' + $siteBase + '/index.html"},{"@type":"ListItem","position":2,"name":"Comprar","item":"' + $siteBase + '/index.html#acervo"},{"@type":"ListItem","position":3,"name":"' + (JsonEscape($im.n)) + '","item":"' + (JsonEscape($pageUrl)) + '"}]}'
+
+  $jsonLd = '{"@context":"https://schema.org","@graph":[' + $listingLd + ',' + $breadcrumbLd + ']}'
+
   $page = $template
   $page = $page.Replace("__CODE__", $im.c)
   $page = $page.Replace("__TITLE__", $title)
   $page = $page.Replace("__METADESC__", $metaDesc)
   $page = $page.Replace("__OGIMAGE__", $ogImage)
+  $page = $page.Replace("__JSONLD__", $jsonLd)
 
   $outPath = "$root\imoveis\$($im.c).html"
   [System.IO.File]::WriteAllText($outPath, $page, [System.Text.UTF8Encoding]::new($false))
