@@ -128,6 +128,7 @@
               '<a href="https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(pageUrl) + '" target="_blank" rel="noopener" aria-label="Compartilhar no Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12z"/></svg></a>' +
               '<a href="https://api.whatsapp.com/send?text=' + encodeURIComponent(pageUrl) + '" target="_blank" rel="noopener" aria-label="Copiar link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.5.5l2-2a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7.5-.5l-2 2a5 5 0 0 0 7 7l1-1"/></svg></a>' +
             '</div>' +
+            (im.lat && im.lng ? ('<h2 class="pd-section-title">Localização</h2><div id="pdMap" class="pd-map"></div>') : '') +
           '</div>' +
           '<aside class="pd-sidebar">' +
             '<div class="pd-agent-card">' +
@@ -194,6 +195,17 @@
       if(e.key === 'ArrowLeft') setIndex(curIndex-1);
       if(e.key === 'ArrowRight') setIndex(curIndex+1);
     });
+
+    // Location map
+    var mapEl = document.getElementById('pdMap');
+    if(mapEl && window.L && im.lat && im.lng){
+      var map = L.map('pdMap', { scrollWheelZoom: false }).setView([im.lat, im.lng], 15);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+      }).addTo(map);
+      L.marker([im.lat, im.lng]).addTo(map);
+    }
 
     // Related listings
     var related = (window.IMOVEIS || [])
