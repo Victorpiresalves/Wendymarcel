@@ -35,8 +35,9 @@ section[id]{scroll-margin-top:calc(var(--header-h) + 14px)}
 .topbar-addr{display:flex;align-items:center;gap:6px}
 .topbar-links{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
 .topbar a:hover{color:#fff}
-.topbar-ig{color:var(--orange);font-weight:700}
-@media(max-width:560px){.topbar-addr{display:none}}
+.topbar-ig{color:var(--orange);font-weight:700;display:inline-flex;align-items:center;gap:6px}
+.topbar-ig svg{width:16px;height:16px;flex-shrink:0}
+@media(max-width:560px){.topbar-addr{display:none}.topbar-ig-text{display:none}}
 
 /* ---------- Header ---------- */
 .site-header{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid var(--border);transition:box-shadow .25s ease}
@@ -44,6 +45,7 @@ section[id]{scroll-margin-top:calc(var(--header-h) + 14px)}
 .nav{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:var(--header-h)}
 .brand{display:flex;align-items:center;gap:12px}
 .brand-logo-img{display:block;height:56px;width:auto;object-fit:contain;flex-shrink:0}
+@media(max-width:939px){.brand-logo-img{height:66px}}
 
 .nav-links{display:none;align-items:center;gap:30px;list-style:none;margin:0;padding:0}
 .nav-links a{font-weight:600;font-size:.92rem;color:var(--ink);position:relative;padding:6px 2px}
@@ -56,10 +58,15 @@ section[id]{scroll-margin-top:calc(var(--header-h) + 14px)}
 .btn-primary:hover{background:var(--navy-dark)}
 .btn-accent{background:var(--orange);color:#fff;padding:13px 26px;font-size:.86rem;box-shadow:0 10px 24px rgba(244,129,32,.28)}
 .btn-accent:hover{background:var(--orange-dark)}
+.btn-accent svg{width:18px;height:18px;flex-shrink:0}
 .btn-outline{background:#fff;color:var(--navy);border:2px solid var(--navy);padding:11px 26px;font-size:.86rem}
 .btn-outline:hover{background:var(--navy);color:#fff}
 .btn-block{width:100%}
 .header-cta{display:none}
+
+.header-wa-btn{display:none;align-items:center;justify-content:center;width:46px;height:46px;border-radius:50%;background:var(--wa-green);color:#fff;flex-shrink:0;box-shadow:0 6px 16px rgba(37,211,102,.35)}
+.header-wa-btn svg{width:24px;height:24px;fill:#fff}
+@media(max-width:939px){.header-wa-btn{display:inline-flex}}
 
 .nav-toggle{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border:1px solid var(--border);border-radius:10px;background:#fff;flex-shrink:0}
 .nav-toggle svg{width:20px;height:20px}
@@ -67,8 +74,10 @@ section[id]{scroll-margin-top:calc(var(--header-h) + 14px)}
 .nav-toggle[aria-expanded="true"] .icon-open{display:none}
 .nav-toggle[aria-expanded="true"] .icon-close{display:block}
 
-.mobile-panel{position:fixed;inset:var(--header-h) 0 0 0;background:#fff;z-index:99;transform:translateY(-8px);opacity:0;visibility:hidden;transition:opacity .22s ease,transform .22s ease,visibility .22s;overflow-y:auto}
-.mobile-panel.is-open{opacity:1;transform:translateY(0);visibility:visible}
+.mobile-panel{position:fixed;inset:var(--header-h) 0 0 0;background:#fff;z-index:99;transform:translateY(-8px);opacity:0;pointer-events:none;transition:opacity .22s ease,transform .22s ease;overflow-y:auto}
+.mobile-panel.is-open{opacity:1;transform:translateY(0);pointer-events:auto}
+.mobile-panel-close{display:flex;align-items:center;gap:8px;margin:4px 0 14px;border:1.5px solid var(--border);border-radius:999px;background:#fff;color:var(--ink);font-family:'Montserrat',sans-serif;font-weight:700;font-size:.9rem;padding:11px 18px;width:fit-content}
+.mobile-panel-close svg{width:18px;height:18px;flex-shrink:0}
 .mobile-panel .container{padding-top:22px;padding-bottom:32px;display:flex;flex-direction:column;gap:6px}
 .mobile-panel a{display:block;padding:15px 6px;font-family:'Montserrat',sans-serif;font-weight:700;font-size:1.05rem;color:var(--ink);border-bottom:1px solid var(--border)}
 .mobile-panel .btn{margin-top:18px}
@@ -409,3 +418,16 @@ body.nav-open{overflow:hidden}
 .pd-back{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:.86rem;color:var(--muted);margin-bottom:6px}
 .pd-back:hover{color:var(--navy)}
 .pd-back svg{width:16px;height:16px}
+
+/* ---------- Mobile legibility (bump the smallest, most-read text) ---------- */
+@media(max-width:760px){
+  .topbar{font-size:.86rem}
+  .property-specs{font-size:.85rem}
+  .property-loc{font-size:.86rem}
+  .chip{font-size:.82rem;padding:11px 18px}
+  .result-count{font-size:.9rem}
+  .footer-bottom{font-size:.85rem}
+  .footer-links a{font-size:.95rem}
+  .pd-agent-creci{font-size:.82rem}
+  .lead-consent{font-size:.78rem}
+}
