@@ -1,10 +1,7 @@
 (function(){
   "use strict";
 
-  // TODO(Wendy/dono do site): troque pela sua chave gratuita gerada em https://web3forms.com
-  // (basta digitar seu e-mail lá, a chave chega na hora, sem senha nem cartão).
-  // Enquanto essa chave não for trocada, os formulários abaixo não vão conseguir enviar e-mail.
-  var WEB3FORMS_KEY = "COLOQUE_SUA_CHAVE_WEB3FORMS_AQUI";
+  var WEB3FORMS_KEY = "60288488-00d4-4908-9923-efb392d16179";
 
   var TIPOS = ['Apartamento','Casa','Casa em Condomínio','Chácara','Ponto Comercial','Rancho','Sobrado','Terreno','Terreno em Condomínio'];
 
