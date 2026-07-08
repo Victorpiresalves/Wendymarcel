@@ -216,6 +216,10 @@
 
       <div id="cardGrid" class="card-grid"></div>
 
+      <div id="loadMoreWrap" class="load-more-wrap" style="display:none">
+        <button type="button" id="loadMoreBtn" class="btn btn-outline">Carregar mais imóveis</button>
+      </div>
+
       <div id="emptyState" class="empty-state" style="display:none">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.6" y2="16.6"/></svg>
         <p>Nenhum imóvel encontrado com esses filtros.<br>Fale com o Wendy pelo WhatsApp — novas oportunidades chegam toda semana.</p>
@@ -370,13 +374,23 @@
   }
   var PLACEHOLDER = placeholderSvg();
 
-  var state = { tipo:"", cidade:"", quartos:"", valor:"", ordenar:"" };
+  var SPEC_ICONS = {
+    q: '<svg class="spec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="7" rx="1.5"/><path d="M3 18v2M21 18v2"/><path d="M3 11V8a2 2 0 0 1 2-2h5v5"/></svg>',
+    b: '<svg class="spec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z"/><path d="M4 12V7a2 2 0 0 1 2-2"/><line x1="3" y1="19" x2="3" y2="21"/><line x1="21" y1="19" x2="21" y2="21"/></svg>',
+    v: '<svg class="spec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13l1.5-4.5A2 2 0 0 1 6.4 7h11.2a2 2 0 0 1 1.9 1.5L21 13"/><rect x="2" y="13" width="20" height="5" rx="1.5"/><circle cx="7" cy="18" r="1.5"/><circle cx="17" cy="18" r="1.5"/></svg>',
+    a: '<svg class="spec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>'
+  };
+
+  var state = { tipo:"", cidade:"", quartos:"", valor:"", ordenar:"", page:1 };
+  var PAGE_SIZE = 9;
 
   var els = {
     chips: document.getElementById('chips'),
     grid: document.getElementById('cardGrid'),
     empty: document.getElementById('emptyState'),
     count: document.getElementById('resultCount'),
+    loadMoreWrap: document.getElementById('loadMoreWrap'),
+    loadMoreBtn: document.getElementById('loadMoreBtn'),
     fCidade: document.getElementById('fCidade'),
     fQuartos: document.getElementById('fQuartos'),
     fValor: document.getElementById('fValor'),
@@ -407,14 +421,14 @@
     var frag = document.createDocumentFragment();
     var all = document.createElement('button');
     all.type = 'button'; all.className = 'chip' + (state.tipo === "" ? ' active' : '');
-    all.textContent = 'Todos'; all.onclick = function(){ state.tipo = ""; update(); };
+    all.textContent = 'Todos'; all.onclick = function(){ state.tipo = ""; state.page = 1; update(); };
     frag.appendChild(all);
     tipos.forEach(function(t){
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'chip' + (state.tipo === t ? ' active' : '');
       btn.textContent = t + ' (' + tiposCount[t] + ')';
-      btn.onclick = function(){ state.tipo = t; update(); };
+      btn.onclick = function(){ state.tipo = t; state.page = 1; update(); };
       frag.appendChild(btn);
     });
     els.chips.innerHTML = '';
@@ -440,10 +454,10 @@
 
   function cardHtml(im){
     var specs = [];
-    if(im.q) specs.push('<span>' + im.q + ' quartos</span>');
-    if(im.b) specs.push('<span>' + im.b + ' banheiros</span>');
-    if(im.v) specs.push('<span>' + im.v + ' vagas</span>');
-    if(im.a) specs.push('<span>' + im.a + '</span>');
+    if(im.q) specs.push('<span>' + SPEC_ICONS.q + im.q + ' quartos</span>');
+    if(im.b) specs.push('<span>' + SPEC_ICONS.b + im.b + ' banheiros</span>');
+    if(im.v) specs.push('<span>' + SPEC_ICONS.v + im.v + ' vagas</span>');
+    if(im.a) specs.push('<span>' + SPEC_ICONS.a + im.a + '</span>');
     var msg = encodeURIComponent('Olá Wendy! Tenho interesse no imóvel ' + im.n + ' (cód. ' + im.c + '). Pode me passar mais informações?');
     var gal = (im.imgs && im.imgs.length) ? im.imgs : (im.f ? [im.f] : []);
     var foto = gal.length ? (FOTO_BASE + gal[0]) : PLACEHOLDER;
@@ -471,27 +485,32 @@
   function update(){
     renderChips();
     var list = filteredList();
-    els.count.textContent = list.length + ' de ' + IMOVEIS.length + ' imóveis';
+    var visible = list.slice(0, state.page * PAGE_SIZE);
+    els.count.textContent = visible.length + ' de ' + list.length + ' imóveis';
     if(list.length === 0){
       els.grid.style.display = 'none';
       els.empty.style.display = 'block';
+      els.loadMoreWrap.style.display = 'none';
     } else {
       els.grid.style.display = 'grid';
       els.empty.style.display = 'none';
-      els.grid.innerHTML = list.map(cardHtml).join('');
+      els.grid.innerHTML = visible.map(cardHtml).join('');
+      els.loadMoreWrap.style.display = (visible.length < list.length) ? 'flex' : 'none';
     }
   }
 
-  els.fCidade.addEventListener('change', function(){ state.cidade = this.value; update(); });
-  els.fQuartos.addEventListener('change', function(){ state.quartos = this.value; update(); });
-  els.fValor.addEventListener('change', function(){ state.valor = this.value; els.heroValor.value = this.value; update(); });
-  els.fOrdenar.addEventListener('change', function(){ state.ordenar = this.value; update(); });
+  els.fCidade.addEventListener('change', function(){ state.cidade = this.value; state.page = 1; update(); });
+  els.fQuartos.addEventListener('change', function(){ state.quartos = this.value; state.page = 1; update(); });
+  els.fValor.addEventListener('change', function(){ state.valor = this.value; els.heroValor.value = this.value; state.page = 1; update(); });
+  els.fOrdenar.addEventListener('change', function(){ state.ordenar = this.value; state.page = 1; update(); });
+  els.loadMoreBtn.addEventListener('click', function(){ state.page++; update(); });
 
   document.getElementById('heroSearch').addEventListener('submit', function(e){
     e.preventDefault();
     state.tipo = els.heroTipo.value;
     state.valor = els.heroValor.value;
     els.fValor.value = els.heroValor.value;
+    state.page = 1;
     update();
     var target = document.getElementById('acervo');
     window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - 88, behavior: 'smooth' });
@@ -503,6 +522,7 @@
       if(kind === 'primeira'){ state.tipo = ""; state.valor = "400000"; els.fValor.value = "400000"; }
       if(kind === 'lazer'){ state.tipo = "Rancho"; state.valor = ""; els.fValor.value = ""; }
       if(kind === 'alto'){ state.tipo = "Casa em Condomínio"; state.valor = ""; els.fValor.value = ""; }
+      state.page = 1;
       update();
       setTimeout(function(){
         var target = document.getElementById('acervo');

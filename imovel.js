@@ -18,6 +18,13 @@
   }
   var PLACEHOLDER = placeholderSvg();
 
+  var SPEC_ICONS = {
+    q: '<svg class="spec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="7" rx="1.5"/><path d="M3 18v2M21 18v2"/><path d="M3 11V8a2 2 0 0 1 2-2h5v5"/></svg>',
+    b: '<svg class="spec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z"/><path d="M4 12V7a2 2 0 0 1 2-2"/><line x1="3" y1="19" x2="3" y2="21"/><line x1="21" y1="19" x2="21" y2="21"/></svg>',
+    v: '<svg class="spec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13l1.5-4.5A2 2 0 0 1 6.4 7h11.2a2 2 0 0 1 1.9 1.5L21 13"/><rect x="2" y="13" width="20" height="5" rx="1.5"/><circle cx="7" cy="18" r="1.5"/><circle cx="17" cy="18" r="1.5"/></svg>',
+    a: '<svg class="spec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>'
+  };
+
   function galleryOf(im){
     if(im.imgs && im.imgs.length) return im.imgs;
     if(im.f) return [im.f];
@@ -26,10 +33,10 @@
 
   function cardHtml(im){
     var specs = [];
-    if(im.q) specs.push('<span>' + im.q + ' quartos</span>');
-    if(im.b) specs.push('<span>' + im.b + ' banheiros</span>');
-    if(im.v) specs.push('<span>' + im.v + ' vagas</span>');
-    if(im.a) specs.push('<span>' + im.a + '</span>');
+    if(im.q) specs.push('<span>' + SPEC_ICONS.q + im.q + ' quartos</span>');
+    if(im.b) specs.push('<span>' + SPEC_ICONS.b + im.b + ' banheiros</span>');
+    if(im.v) specs.push('<span>' + SPEC_ICONS.v + im.v + ' vagas</span>');
+    if(im.a) specs.push('<span>' + SPEC_ICONS.a + im.a + '</span>');
     var msg = encodeURIComponent('Olá Wendy! Tenho interesse no imóvel ' + im.n + ' (cód. ' + im.c + '). Pode me passar mais informações?');
     var gal = galleryOf(im);
     var foto = gal.length ? (FOTO_BASE + gal[0]) : PLACEHOLDER;
@@ -84,10 +91,10 @@
     var waLink = 'https://wa.me/' + WPP + '?text=' + waMsg;
 
     var specs = [];
-    if(im.q) specs.push({v:im.q, l:'Quartos'});
-    if(im.b) specs.push({v:im.b, l:'Banheiros'});
-    if(im.v) specs.push({v:im.v, l:'Vagas'});
-    if(im.a) specs.push({v:im.a, l:'Área'});
+    if(im.q) specs.push({v:im.q, l:'Quartos', icon:SPEC_ICONS.q});
+    if(im.b) specs.push({v:im.b, l:'Banheiros', icon:SPEC_ICONS.b});
+    if(im.v) specs.push({v:im.v, l:'Vagas', icon:SPEC_ICONS.v});
+    if(im.a) specs.push({v:im.a, l:'Área', icon:SPEC_ICONS.a});
 
     var pageUrl = window.location.href;
 
@@ -120,7 +127,7 @@
 
         '<div class="pd-body">' +
           '<div>' +
-            '<div class="pd-specs">' + specs.map(function(s){ return '<div class="pd-spec"><b>' + s.v + '</b><span>' + s.l + '</span></div>'; }).join('') + '</div>' +
+            '<div class="pd-specs">' + specs.map(function(s){ return '<div class="pd-spec">' + s.icon + '<b>' + s.v + '</b><span>' + s.l + '</span></div>'; }).join('') + '</div>' +
             '<h2 class="pd-section-title">Sobre o imóvel</h2>' +
             '<p class="pd-desc">' + (im.d || ('Imóvel do tipo ' + im.t + ', localizado em ' + im.l + '. Entre em contato com o Wendy para mais detalhes e para agendar uma visita.')) + '</p>' +
             '<div class="pd-share">' +
