@@ -1,4 +1,4 @@
-const IMOVEIS = [
+var IMOVEIS = [
   {"c":"207306","t":"Casa","n":"Casa no Bairro Quemil","l":"Quemil · Birigui/SP","p":180000,"q":2,"b":1,"v":null,"a":null,"f":"thumb-251125142238-3.jpeg",
    "imgs":["251125142238-3.jpeg","251125142238-0.jpeg","251125142238-1.jpeg","251125142238-2.jpeg","251125142238-4.jpeg","251125142238-5.jpeg","251125142238-6.jpeg","251125142238-7.jpeg","251125142238-8.jpeg","251125142238-9.jpeg","251125142238-10.jpeg","251125142238-11.jpeg","251125142238-12.jpeg","251125142238-13.jpeg","251125142238-14.jpeg","251125142238-15.jpeg","251125142238-16.jpeg","251125142238-17.jpeg"],
    "d":"Casa à venda por apenas R$ 180.000,00. Imóvel em excelente estado de conservação! Aceita troca por outro imóvel. Casa espaçosa e bem cuidada. Pronta para morar, sem necessidade de reformas. Documentação em dia. Entre em contato e agende sua visita agora mesmo!"},

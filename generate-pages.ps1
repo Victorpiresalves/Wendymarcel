@@ -5,6 +5,12 @@ $data = $json | ConvertFrom-Json
 $template = [System.IO.File]::ReadAllText("$root\imovel-template.html", [System.Text.Encoding]::UTF8)
 $fotoBase = "https://wendymarcel.com.br/fotos/"
 
+# NOTE: must be "var", not "const"/"let" - top-level const/let in a classic
+# script does not attach to window, and imovel.js reads window.IMOVEIS.
+$dataJs = "var IMOVEIS = " + $json + ";`n"
+[System.IO.File]::WriteAllText("$root\imoveis-data.js", $dataJs, [System.Text.UTF8Encoding]::new($false))
+Write-Output "Regenerated imoveis-data.js"
+
 function HtmlEscape($s) {
   if ($null -eq $s) { return "" }
   $s = $s -replace '&', '&amp;'
