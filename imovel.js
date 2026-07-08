@@ -61,7 +61,9 @@
     if(!root) return;
     var im = (window.IMOVEIS || []).find(function(x){ return x.c === window.PROPERTY_CODE; });
     if(!im){
-      root.innerHTML = '<div class="container" style="padding:80px 0;text-align:center"><h1>Imóvel não encontrado</h1><p style="color:var(--muted);margin-top:12px"><a href="../index.html#acervo" style="color:var(--navy);font-weight:700">Voltar para o acervo</a></p></div>';
+      var scriptSrcs = Array.prototype.map.call(document.scripts, function(s){ return s.src || '(inline)'; }).join(' | ');
+      var dbg = 'typeofIMOVEIS=' + typeof window.IMOVEIS + ' len=' + (window.IMOVEIS ? window.IMOVEIS.length : 'n/a') + ' code=' + JSON.stringify(window.PROPERTY_CODE) + ' first=' + (window.IMOVEIS && window.IMOVEIS[0] ? JSON.stringify(window.IMOVEIS[0].c) : 'n/a') + ' | SCRIPTS: ' + scriptSrcs + ' | docURL=' + document.URL + ' | baseURI=' + document.baseURI;
+      root.innerHTML = '<div class="container" style="padding:80px 0;text-align:center"><h1>Imóvel não encontrado</h1><p id="dbgInfo" style="color:red;margin-top:12px">' + dbg + '</p><p style="color:var(--muted);margin-top:12px"><a href="../index.html#acervo" style="color:var(--navy);font-weight:700">Voltar para o acervo</a></p></div>';
       return;
     }
 
