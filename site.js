@@ -66,7 +66,7 @@
         '<div class="property-photo-wrap">' +
           '<a class="property-photo-link" href="' + href + '">' +
             '<div class="property-photo">' +
-              '<img src="' + foto + '" alt="' + im.n + '" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=\'' + PLACEHOLDER + '\'">' +
+              '<img src="' + foto + '" alt="' + im.n + '" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=window.WendySite.PLACEHOLDER">' +
               '<span class="property-tag">' + im.t + '</span>' +
               '<span class="property-code">cód. ' + im.c + '</span>' +
             '</div>' +

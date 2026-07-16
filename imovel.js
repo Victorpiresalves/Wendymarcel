@@ -70,11 +70,11 @@
 
         '<div class="pd-gallery">' +
           '<div class="pd-main-photo" id="pdMainPhoto">' +
-            '<img id="pdMainImg" src="' + gallery[0] + '" alt="' + im.n + '" onerror="this.onerror=null;this.src=\'' + PLACEHOLDER + '\'">' +
+            '<img id="pdMainImg" src="' + gallery[0] + '" alt="' + im.n + '" onerror="this.onerror=null;this.src=window.WendySite.PLACEHOLDER">' +
             (gallery.length > 1 ? '<button class="pd-nav-arrow prev" id="pdPrev" aria-label="Foto anterior"><svg viewBox="0 0 24 24" fill="none" stroke="#1E2033" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button><button class="pd-nav-arrow next" id="pdNext" aria-label="Próxima foto"><svg viewBox="0 0 24 24" fill="none" stroke="#1E2033" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>' : '') +
             '<span class="pd-photo-count" id="pdPhotoCount">1 / ' + gallery.length + '</span>' +
           '</div>' +
-          (gallery.length > 1 ? '<div class="pd-thumbs" id="pdThumbs">' + gallery.map(function(src,i){ return '<button data-i="' + i + '" class="' + (i===0?'active':'') + '"><img src="' + src + '" alt="Foto ' + (i+1) + '" loading="lazy" onerror="this.onerror=null;this.src=\'' + PLACEHOLDER + '\'"></button>'; }).join('') + '</div>' : '') +
+          (gallery.length > 1 ? '<div class="pd-thumbs" id="pdThumbs">' + gallery.map(function(src,i){ return '<button data-i="' + i + '" class="' + (i===0?'active':'') + '"><img src="' + src + '" alt="Foto ' + (i+1) + '" loading="lazy" onerror="this.onerror=null;this.src=window.WendySite.PLACEHOLDER"></button>'; }).join('') + '</div>' : '') +
         '</div>' +
 
         '<div class="pd-body">' +
