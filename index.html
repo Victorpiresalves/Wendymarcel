@@ -16,6 +16,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<script>document.documentElement.classList.add('has-js')</script>
 </head>
 <body>
 <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
@@ -125,7 +126,7 @@
   <!-- PROMO CARDS -->
   <section class="promos">
     <div class="container promo-grid">
-      <article class="promo-card" data-promo="primeira">
+      <article class="promo-card reveal" data-promo="primeira">
         <div class="promo-photo"><img src="/fotos/thumb-311025121933-0.jpeg" alt="Casa de entrada, ideal para primeiro financiamento" loading="lazy" onerror="this.parentElement.style.background='var(--bg-soft-2)';this.remove()"></div>
         <div class="promo-body">
           <h3>Sua primeira casa</h3>
@@ -133,7 +134,7 @@
           <span class="promo-link">Ver imóveis até R$ 400 mil →</span>
         </div>
       </article>
-      <article class="promo-card" data-promo="lazer">
+      <article class="promo-card reveal reveal-1" data-promo="lazer">
         <div class="promo-photo"><img src="/fotos/thumb-061125162036-0.jpeg" alt="Rancho com área de lazer em condomínio" loading="lazy" onerror="this.parentElement.style.background='var(--bg-soft-2)';this.remove()"></div>
         <div class="promo-body">
           <h3>Chácaras e ranchos</h3>
@@ -141,7 +142,7 @@
           <span class="promo-link">Ver chácaras e ranchos →</span>
         </div>
       </article>
-      <article class="promo-card" data-promo="alto">
+      <article class="promo-card reveal reveal-2" data-promo="alto">
         <div class="promo-photo"><img src="/fotos/thumb-140425132259-17.jpeg" alt="Casa de alto padrão no condomínio Ibiza" loading="lazy" onerror="this.parentElement.style.background='var(--bg-soft-2)';this.remove()"></div>
         <div class="promo-body">
           <h3>Alto padrão</h3>
@@ -155,14 +156,14 @@
   <!-- SOBRE -->
   <section id="sobre" class="about">
     <div class="container about-grid">
-      <div class="avatar-card">
+      <div class="avatar-card reveal">
         <img src="corretor.jpg" alt="Wendy Marcel, corretor de imóveis em Birigui/SP" width="960" height="1280">
         <div class="avatar-ribbon">
           <b>Wendy Marcel</b>
           <span><svg class="creci-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 L20 6 V12 C20 17 16.5 20.5 12 22 C7.5 20.5 4 17 4 12 V6 Z"/><polyline points="9 12 11 14 15 9.5"/></svg>CRECI 239577-F</span>
         </div>
       </div>
-      <div class="about-copy">
+      <div class="about-copy reveal reveal-1">
         <span class="eyebrow">Quem te atende</span>
         <h2>Oi, eu sou o <em>Wendy</em>.</h2>
         <p>Sou corretor de imóveis em Birigui há mais de 10 anos. Nasci e cresci na região, conheço cada bairro, cada condomínio e sei o que faz um bom negócio — para quem compra e para quem vende.</p>
@@ -181,7 +182,7 @@
   <section id="acervo" class="listings">
     <div class="container">
       <div class="listings-top">
-        <div class="section-head" style="margin-bottom:0">
+        <div class="section-head reveal" style="margin-bottom:0">
           <h2>Imóveis <em>à venda</em></h2>
           <p>Filtre por tipo, cidade, quartos e valor. Todos com acompanhamento pessoal do Wendy.</p>
         </div>
@@ -247,7 +248,7 @@
   <!-- CAPTAÇÃO DE LEADS -->
   <section id="leads" class="leads">
     <div class="container leads-grid">
-      <div>
+      <div class="reveal">
         <span class="eyebrow">Não encontrou o imóvel ideal?</span>
         <h2>Deixe seus dados e <em>a gente te avisa</em></h2>
         <p class="leads-lead">Conte o que você procura e o Wendy separa pessoalmente as melhores opções para você — muitas vezes antes de irem para o site.</p>
@@ -257,29 +258,29 @@
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Seus dados usados só para contato comercial</li>
         </ul>
       </div>
-      <form class="lead-card" id="leadFormHome"></form>
+      <form class="lead-card reveal reveal-1" id="leadFormHome"></form>
     </div>
   </section>
 
   <!-- DEPOIMENTOS -->
   <section class="testimonials">
     <div class="container">
-      <div class="section-head center">
+      <div class="section-head center reveal">
         <span class="eyebrow" style="justify-content:center">Quem já comprou com o Wendy</span>
         <h2>O que dizem os <em>clientes</em></h2>
       </div>
       <div class="t-grid">
-        <div class="t-card">
+        <div class="t-card reveal">
           <span class="t-quote">"</span>
           <p class="t-text">O Wendy foi muito atencioso, achou a casa certa para a gente e cuidou de toda a papelada. Recomendo!</p>
           <div class="t-person"><span class="t-avatar">M</span><span><b>Maria S.</b><small>Toselar · Birigui/SP</small></span></div>
         </div>
-        <div class="t-card">
+        <div class="t-card reveal reveal-1">
           <span class="t-quote">"</span>
           <p class="t-text">Vendi meu imóvel rápido e pelo valor justo. Atendimento pessoal do começo ao fim.</p>
           <div class="t-person"><span class="t-avatar">R</span><span><b>Roberto A.</b><small>Vila Xavier · Birigui/SP</small></span></div>
         </div>
-        <div class="t-card">
+        <div class="t-card reveal reveal-2">
           <span class="t-quote">"</span>
           <p class="t-text">Primeira compra da vida e ele explicou cada etapa do financiamento com paciência.</p>
           <div class="t-person"><span class="t-avatar">J</span><span><b>Juliana P.</b><small>Portal da Pérola · Birigui/SP</small></span></div>
@@ -291,8 +292,8 @@
   <!-- VENDER -->
   <section id="vender" class="sell">
     <div class="container sell-grid">
-      <div class="sell-photo"><img src="/fotos/thumb-260824143658-0.jpeg" alt="Imóvel residencial à venda em Birigui/SP" loading="lazy" onerror="this.parentElement.style.background='var(--bg-soft-2)';this.remove()"></div>
-      <div class="sell-copy">
+      <div class="sell-photo reveal"><img src="/fotos/thumb-260824143658-0.jpeg" alt="Imóvel residencial à venda em Birigui/SP" loading="lazy" onerror="this.parentElement.style.background='var(--bg-soft-2)';this.remove()"></div>
+      <div class="sell-copy reveal reveal-1">
         <h2>É proprietário? <em style="color:var(--navy);font-style:normal">Venda com quem é da região.</em></h2>
         <p>O Wendy avalia seu imóvel com base no mercado real de Birigui e região, cuida da divulgação e acompanha toda a documentação até a escritura.</p>
         <div class="sell-actions">
@@ -306,7 +307,7 @@
   <!-- FINANCIAMENTO -->
   <section id="financiamento" class="financing">
     <div class="container financing-grid">
-      <div>
+      <div class="reveal">
         <h2>Simule seu <em>financiamento</em></h2>
         <p class="financing-lead">Estimativa de parcela pelo sistema Price. Valores aproximados — o Wendy negocia com os bancos as melhores condições para você.</p>
         <div class="bank-row">
@@ -318,7 +319,7 @@
         </div>
       </div>
 
-      <form class="sim-card" id="simForm">
+      <form class="sim-card reveal reveal-1" id="simForm">
         <div class="sim-field">
           <label for="simValor">Valor do imóvel (R$)</label>
           <input id="simValor" type="number" placeholder="350000" min="10000" required>
@@ -654,6 +655,22 @@
   document.getElementById('mobilePanelClose').addEventListener('click', closeNav);
   document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeNav(); });
   window.addEventListener('resize', function(){ if(window.innerWidth >= 940) closeNav(); });
+
+  // ---------- Scroll reveal ----------
+  var revealEls = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window && revealEls.length){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('is-in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: .15, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(function(el){ io.observe(el); });
+  } else {
+    revealEls.forEach(function(el){ el.classList.add('is-in'); });
+  }
 
   // ---------- Header shadow on scroll ----------
   var header = document.getElementById('topo');
