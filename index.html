@@ -128,7 +128,7 @@
   <!-- PROMO CARDS -->
   <section class="promos">
     <div class="container promo-grid">
-      <article class="promo-card reveal" data-promo="primeira">
+      <article class="promo-card reveal" data-promo="primeira" role="button" tabindex="0" aria-label="Ver imóveis até R$ 400 mil">
         <div class="promo-photo"><img src="/fotos/thumb-311025121933-0.jpeg" alt="Casa de entrada, ideal para primeiro financiamento" loading="lazy" onerror="this.parentElement.style.background='var(--bg-soft-2)';this.remove()"></div>
         <div class="promo-body">
           <h3>Sua primeira casa</h3>
@@ -136,7 +136,7 @@
           <span class="promo-link">Ver imóveis até R$ 400 mil →</span>
         </div>
       </article>
-      <article class="promo-card reveal reveal-1" data-promo="lazer">
+      <article class="promo-card reveal reveal-1" data-promo="lazer" role="button" tabindex="0" aria-label="Ver chácaras e ranchos">
         <div class="promo-photo"><img src="/fotos/thumb-061125162036-0.jpeg" alt="Rancho com área de lazer em condomínio" loading="lazy" onerror="this.parentElement.style.background='var(--bg-soft-2)';this.remove()"></div>
         <div class="promo-body">
           <h3>Chácaras e ranchos</h3>
@@ -144,7 +144,7 @@
           <span class="promo-link">Ver chácaras e ranchos →</span>
         </div>
       </article>
-      <article class="promo-card reveal reveal-2" data-promo="alto">
+      <article class="promo-card reveal reveal-2" data-promo="alto" role="button" tabindex="0" aria-label="Ver condomínios de alto padrão">
         <div class="promo-photo"><img src="/fotos/thumb-140425132259-17.jpeg" alt="Casa de alto padrão no condomínio Ibiza" loading="lazy" onerror="this.parentElement.style.background='var(--bg-soft-2)';this.remove()"></div>
         <div class="promo-body">
           <h3>Alto padrão</h3>
@@ -586,7 +586,7 @@
   });
 
   document.querySelectorAll('[data-promo]').forEach(function(card){
-    card.addEventListener('click', function(){
+    function activate(){
       var kind = card.getAttribute('data-promo');
       if(kind === 'primeira'){ state.tipo = ""; state.valor = "400000"; els.fValor.value = "400000"; }
       if(kind === 'lazer'){ state.tipo = "Rancho"; state.valor = ""; els.fValor.value = ""; }
@@ -597,6 +597,10 @@
         var target = document.getElementById('acervo');
         window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - 88, behavior: 'smooth' });
       }, 30);
+    }
+    card.addEventListener('click', activate);
+    card.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); activate(); }
     });
   });
 

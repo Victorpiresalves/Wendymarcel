@@ -128,6 +128,7 @@ body.nav-open{overflow:hidden}
 @media(min-width:720px){.promo-grid{grid-template-columns:repeat(3,1fr)}}
 .promo-card{border-radius:var(--radius-md);overflow:hidden;border:1px solid var(--border);background:#fff;display:flex;flex-direction:column;transition:transform .25s ease,box-shadow .25s ease;cursor:pointer}
 .promo-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);border-color:var(--navy)}
+.promo-card:focus-visible{outline:none;box-shadow:inset 0 0 0 3px var(--orange)}
 .promo-photo{aspect-ratio:16/10;overflow:hidden;background:var(--bg-soft-2)}
 .promo-photo img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
 .promo-card:hover .promo-photo img{transform:scale(1.06)}
