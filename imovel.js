@@ -3,6 +3,7 @@
 
   var S = window.WendySite;
   var FOTO_BASE = S.FOTO_BASE;
+  var WPP = S.WPP;
   var fmtPrice = S.fmtPrice;
   var cidadeDe = S.cidadeDe;
   var PLACEHOLDER = S.PLACEHOLDER;
