@@ -59,6 +59,7 @@ section[id]{scroll-margin-top:calc(var(--header-h) + 14px)}
 .btn-accent{background:var(--orange);color:#fff;padding:13px 26px;font-size:.86rem;box-shadow:0 10px 24px rgba(244,129,32,.28)}
 .btn-accent:hover{background:var(--orange-dark)}
 .btn-accent svg{width:18px;height:18px;flex-shrink:0}
+.wa-icon{width:15px;height:15px;vertical-align:-2px;margin-right:5px;flex-shrink:0}
 .btn-outline{background:#fff;color:var(--navy);border:2px solid var(--navy);padding:11px 26px;font-size:.86rem}
 .btn-outline:hover{background:var(--navy);color:#fff}
 .btn-block{width:100%}
