@@ -3,8 +3,8 @@ $root = "C:\Projetos\wendymarcel"
 $json = [System.IO.File]::ReadAllText("$root\imoveis-data.json", [System.Text.Encoding]::UTF8)
 $data = $json | ConvertFrom-Json
 $template = [System.IO.File]::ReadAllText("$root\imovel-template.html", [System.Text.Encoding]::UTF8)
-$fotoBase = "https://wendy-marcel.pages.dev/fotos/"
-$siteBase = "https://wendy-marcel.pages.dev"
+$fotoBase = "https://wendymarcel.com.br/fotos/"
+$siteBase = "https://wendymarcel.com.br"
 $inicioLabel = "In" + [char]0x00ED + "cio"
 $middot = [char]0x00B7
 
@@ -95,6 +95,7 @@ foreach ($im in $data) {
   $page = $page.Replace("__TITLE__", $title)
   $page = $page.Replace("__METADESC__", $metaDesc)
   $page = $page.Replace("__OGIMAGE__", $ogImage)
+  $page = $page.Replace("__PAGEURL__", (HtmlEscape($pageUrl)))
   $page = $page.Replace("__JSONLD__", $jsonLd)
 
   $outPath = "$root\imoveis\$($im.c).html"
@@ -102,3 +103,13 @@ foreach ($im in $data) {
   $count++
 }
 Write-Output "Generated $count property pages."
+
+$sitemapUrls = @()
+$sitemapUrls += '  <url><loc>' + $siteBase + '/</loc><changefreq>daily</changefreq><priority>1.0</priority></url>'
+$sitemapUrls += '  <url><loc>' + $siteBase + '/privacidade.html</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>'
+foreach ($im in $data) {
+  $sitemapUrls += '  <url><loc>' + $siteBase + '/imoveis/' + $im.c + '.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>'
+}
+$sitemapXml = '<?xml version="1.0" encoding="UTF-8"?>' + "`n" + '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + "`n" + ($sitemapUrls -join "`n") + "`n" + '</urlset>' + "`n"
+[System.IO.File]::WriteAllText("$root\sitemap.xml", $sitemapXml, [System.Text.UTF8Encoding]::new($false))
+Write-Output "Regenerated sitemap.xml"
