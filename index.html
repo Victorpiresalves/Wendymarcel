@@ -490,11 +490,30 @@
     } else {
       els.grid.style.display = 'grid';
       els.empty.style.display = 'none';
-      els.grid.innerHTML = visible.map(cardHtml).join('');
+      renderGrid(visible);
       els.loadMoreWrap.style.display = (visible.length < list.length) ? 'flex' : 'none';
     }
     els.favCount.textContent = getFavorites().length;
     els.favToggleBtn.classList.toggle('active', state.onlyFav);
+  }
+
+  // Reuses already-rendered card nodes instead of rebuilding the grid from
+  // scratch on every filter change, so loaded photos don't refetch.
+  var cardCache = {};
+  function renderGrid(visible){
+    var frag = document.createDocumentFragment();
+    visible.forEach(function(im){
+      var node = cardCache[im.c];
+      if(!node){
+        var wrap = document.createElement('div');
+        wrap.innerHTML = cardHtml(im);
+        node = wrap.firstElementChild;
+        cardCache[im.c] = node;
+      }
+      frag.appendChild(node);
+    });
+    els.grid.innerHTML = '';
+    els.grid.appendChild(frag);
   }
 
   els.fCidade.addEventListener('change', function(){ state.cidade = this.value; state.page = 1; update(); });
@@ -507,8 +526,14 @@
     var btn = e.target.closest('.fav-btn');
     if(!btn) return;
     e.preventDefault();
-    toggleFavorite(btn.getAttribute('data-fav'));
-    update();
+    var code = btn.getAttribute('data-fav');
+    toggleFavorite(code);
+    if(state.onlyFav){ update(); return; }
+    var fav = isFavorite(code);
+    btn.classList.toggle('is-fav', fav);
+    btn.setAttribute('aria-label', fav ? 'Remover dos favoritos' : 'Adicionar aos favoritos');
+    btn.querySelector('svg').setAttribute('fill', fav ? 'currentColor' : 'none');
+    els.favCount.textContent = getFavorites().length;
   });
 
   document.getElementById('heroSearch').addEventListener('submit', function(e){
