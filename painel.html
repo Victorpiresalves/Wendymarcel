@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Painel - Wendy Marcel</title>
+  <style>
+    :root {
+      --navy: #2E3191;
+      --accent: #F48120;
+      --bg: #f7f7fb;
+      --card: #fff;
+      --text: #1e2033;
+      --muted: #68708b;
+      --border: #e6e8ef;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; background: var(--bg); color: var(--text); }
+
+    .login-shell { min-height: 100vh; display: grid; place-items: center; padding: 20px; }
+    .login-box { width: min(420px, 100%); background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 32px; box-shadow: 0 8px 28px rgba(0,0,0,0.08); }
+    .login-box h1 { margin: 0 0 8px 0; font-size: 1.75rem; color: var(--navy); }
+    .login-box > p { margin: 0 0 24px 0; color: var(--muted); font-size: 0.95rem; }
+    .field { margin-bottom: 16px; }
+    .field label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 6px; color: var(--text); }
+    .field input { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; font-family: inherit; }
+    .field input:focus { outline: none; border-color: var(--navy); box-shadow: 0 0 0 3px rgba(46, 49, 145, 0.1); }
+    button { padding: 12px; margin-top: 8px; background: var(--navy); color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; }
+    button:hover { background: #1a1d5c; }
+    button:disabled { opacity: .6; cursor: default; }
+    .login-box button { width: 100%; }
+    .error { color: #b42318; font-size: 0.9rem; margin-top: 12px; display: none; }
+    .error.show { display: block; }
+    .notice { color: #1a7f37; font-size: 0.9rem; margin-top: 12px; display: none; }
+    .notice.show { display: block; }
+
+    .panel-wrap { max-width: 1200px; margin: 0 auto; padding: 24px; display: none; }
+    .panel-wrap.show { display: block; }
+    .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px solid var(--border); flex-wrap: wrap; gap: 10px; }
+    .panel-header h1 { margin: 0; color: var(--navy); font-size: 1.5rem; }
+    .panel-header button { width: auto; padding: 8px 16px; background: #dc2626; margin-top: 0; }
+    .panel-header button:hover { background: #b91c1c; }
+
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+    .card h2 { margin-top: 0; color: var(--navy); font-size: 1.2rem; }
+    .card > p.muted { color: var(--muted); font-size: 0.85rem; margin-top: -8px; }
+
+    .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+    label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; }
+    input, textarea, select { width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 0.9rem; font-family: inherit; }
+    textarea { min-height: 80px; resize: vertical; }
+    .grid-full { grid-column: 1 / -1; }
+
+    .button-group { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; align-items: center; }
+    .button-group button { width: auto; margin: 0; padding: 10px 16px; }
+    .button-group .secondary { background: #e5e7eb; color: var(--text); }
+    .button-group .secondary:hover { background: #d1d5db; }
+    .button-group .status { font-size: 0.85rem; color: var(--muted); }
+
+    .thumbs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .thumbs img { width: 72px; height: 54px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border); }
+
+    .listing-item { border: 1px solid var(--border); border-radius: 8px; padding: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 10px; }
+    .listing-item img { width: 56px; height: 42px; object-fit: cover; border-radius: 6px; flex-shrink: 0; }
+    .listing-item-info { flex: 1; min-width: 0; }
+    .listing-item-info strong { display: block; }
+    .listing-item-info .meta { color: var(--muted); font-size: 0.85rem; }
+    .listing-item-actions { display: flex; gap: 8px; flex-shrink: 0; }
+    .listing-item-actions button { width: auto; padding: 6px 12px; font-size: 0.85rem; margin: 0; }
+
+    .banner { padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 0.9rem; }
+    .banner.info { background: #eef2ff; color: #2E3191; }
+    .banner.error { background: #fef2f2; color: #b42318; }
+  </style>
+</head>
+<body>
+  <div id="loginView" class="login-shell">
+    <div class="login-box">
+      <h1>🔐 Acesso ao painel</h1>
+      <p>Entre com usuário e senha para editar o site.</p>
+
+      <div class="field">
+        <label for="user">Usuário</label>
+        <input id="user" type="text" autocomplete="username" />
+      </div>
+
+      <div class="field">
+        <label for="pass">Senha</label>
+        <input id="pass" type="password" autocomplete="current-password" />
+      </div>
+
+      <button id="loginBtn" onclick="doLogin()">Entrar</button>
+      <div id="error" class="error"></div>
+    </div>
+  </div>
+
+  <div id="panelView" class="panel-wrap">
+    <div class="panel-header">
+      <h1>📋 Painel Wendy Marcel</h1>
+      <button onclick="doLogout()">Sair</button>
+    </div>
+
+    <div id="banner"></div>
+
+    <div class="card">
+      <h2 id="formTitle">Adicionar / editar imóvel</h2>
+      <p class="muted">Ao salvar, o site é atualizado automaticamente (o novo deploy leva cerca de 1-2 minutos para ficar no ar).</p>
+      <div class="grid">
+        <input id="listCode" placeholder="Código *" />
+        <input id="listType" placeholder="Tipo * (Casa, Chácara, Terreno...)" />
+        <input id="listName" placeholder="Nome *" />
+        <input id="listLocation" placeholder="Localização (ex: Bairro · Cidade/SP)" />
+        <input id="listPrice" type="number" placeholder="Preço (R$)" />
+        <input id="listArea" placeholder="Área (ex: 250m²)" />
+        <input id="listQuartos" type="number" placeholder="Quartos" />
+        <input id="listBanheiros" type="number" placeholder="Banheiros" />
+        <input id="listVagas" type="number" placeholder="Vagas" />
+        <input id="listLat" type="number" step="any" placeholder="Latitude (opcional)" />
+        <input id="listLng" type="number" step="any" placeholder="Longitude (opcional)" />
+      </div>
+
+      <div class="grid-full" style="margin-top: 16px;">
+        <label>Fotos</label>
+        <input id="listPhotoFile" type="file" accept="image/jpeg,image/png,image/webp" multiple />
+        <div class="button-group">
+          <button type="button" class="secondary" onclick="uploadPhotos()">📤 Enviar fotos selecionadas</button>
+          <span id="uploadStatus" class="status"></span>
+        </div>
+        <div id="thumbs" class="thumbs"></div>
+        <p class="muted" style="margin-top: 10px;">As fotos enviadas aqui já ficam associadas a este imóvel. Para reordenar ou remover, edite a lista abaixo (nomes de arquivo separados por vírgula, na ordem desejada — o primeiro é a foto de capa).</p>
+        <input id="listImgs" placeholder="Imagens (nomes de arquivo separados por vírgula)" />
+      </div>
+
+      <div class="grid-full" style="margin-top: 16px;">
+        <label>Descrição</label>
+        <textarea id="listDesc" placeholder="Descrição do imóvel"></textarea>
+      </div>
+
+      <div class="button-group">
+        <button onclick="saveListing()">💾 Salvar imóvel</button>
+        <button class="secondary" onclick="clearListingForm()">Limpar / novo imóvel</button>
+        <span id="saveStatus" class="status"></span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Imóveis cadastrados</h2>
+      <div id="listingsList"></div>
+    </div>
+  </div>
+
+  <script>
+    var state = { listings: [], editingCode: null, uploadedFiles: [] };
+
+    function showView(view) {
+      document.getElementById('loginView').style.display = view === 'login' ? 'grid' : 'none';
+      document.getElementById('panelView').classList.toggle('show', view === 'panel');
+    }
+
+    function banner(msg, type) {
+      var el = document.getElementById('banner');
+      if (!msg) { el.innerHTML = ''; return; }
+      el.innerHTML = '<div class="banner ' + (type || 'info') + '">' + msg + '</div>';
+    }
+
+    async function api(path, options) {
+      options = options || {};
+      options.credentials = 'same-origin';
+      var res = await fetch(path, options);
+      var data = null;
+      try { data = await res.json(); } catch (e) {}
+      if (!res.ok) {
+        var err = new Error((data && data.error) || ('Erro ' + res.status));
+        err.status = res.status;
+        throw err;
+      }
+      return data;
+    }
+
+    async function doLogin() {
+      var user = document.getElementById('user').value.trim();
+      var pass = document.getElementById('pass').value;
+      var error = document.getElementById('error');
+      var btn = document.getElementById('loginBtn');
+      error.classList.remove('show');
+      btn.disabled = true;
+      try {
+        await api('/api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ user: user, pass: pass }) });
+        showView('panel');
+        await loadListings();
+      } catch (e) {
+        error.textContent = e.message || 'Usuário ou senha inválidos';
+        error.classList.add('show');
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    async function doLogout() {
+      try { await api('/api/logout', { method: 'POST' }); } catch (e) {}
+      showView('login');
+      document.getElementById('user').value = '';
+      document.getElementById('pass').value = '';
+    }
+
+    async function loadListings() {
+      banner('Carregando imóveis...', 'info');
+      try {
+        var data = await api('/api/listings');
+        state.listings = data.listings || [];
+        banner('');
+        renderListings();
+      } catch (e) {
+        banner('Não foi possível carregar os imóveis: ' + e.message, 'error');
+      }
+    }
+
+    function fotoUrl(name) {
+      return '/fotos/' + name;
+    }
+
+    function renderListings() {
+      var list = document.getElementById('listingsList');
+      if (!state.listings.length) {
+        list.innerHTML = '<p style="color: var(--muted);">Nenhum imóvel cadastrado</p>';
+        return;
+      }
+      list.innerHTML = state.listings.map(function (item) {
+        var thumb = (item.imgs && item.imgs[0]) ? fotoUrl(item.imgs[0]) : '';
+        return (
+          '<div class="listing-item">' +
+            (thumb ? '<img src="' + thumb + '" alt="">' : '') +
+            '<div class="listing-item-info">' +
+              '<strong>' + (item.n || 'Sem nome') + '</strong>' +
+              '<div class="meta">Cód. ' + item.c + ' · ' + (item.t || 'Tipo') + ' · ' + (item.l || 'Local') + '</div>' +
+            '</div>' +
+            '<div class="listing-item-actions">' +
+              '<button class="secondary" onclick="editListing(\'' + item.c + '\')">Editar</button>' +
+              '<button class="secondary" style="background:#fca5a5; color:#7f1d1d;" onclick="deleteListing(\'' + item.c + '\')">Apagar</button>' +
+            '</div>' +
+          '</div>'
+        );
+      }).join('');
+    }
+
+    function fieldIds() {
+      return ['listCode', 'listType', 'listName', 'listLocation', 'listPrice', 'listArea', 'listQuartos', 'listBanheiros', 'listVagas', 'listLat', 'listLng', 'listImgs', 'listDesc'];
+    }
+
+    function clearListingForm() {
+      fieldIds().forEach(function (id) { document.getElementById(id).value = ''; });
+      document.getElementById('listPhotoFile').value = '';
+      document.getElementById('thumbs').innerHTML = '';
+      document.getElementById('uploadStatus').textContent = '';
+      document.getElementById('saveStatus').textContent = '';
+      document.getElementById('formTitle').textContent = 'Adicionar / editar imóvel';
+      state.editingCode = null;
+    }
+
+    function editListing(code) {
+      var item = state.listings.find(function (x) { return String(x.c) === String(code); });
+      if (!item) return;
+      state.editingCode = code;
+      document.getElementById('listCode').value = item.c || '';
+      document.getElementById('listType').value = item.t || '';
+      document.getElementById('listName').value = item.n || '';
+      document.getElementById('listLocation').value = item.l || '';
+      document.getElementById('listPrice').value = item.p != null ? item.p : '';
+      document.getElementById('listArea').value = item.a || '';
+      document.getElementById('listQuartos').value = item.q != null ? item.q : '';
+      document.getElementById('listBanheiros').value = item.b != null ? item.b : '';
+      document.getElementById('listVagas').value = item.v != null ? item.v : '';
+      document.getElementById('listLat').value = item.lat != null ? item.lat : '';
+      document.getElementById('listLng').value = item.lng != null ? item.lng : '';
+      document.getElementById('listImgs').value = (item.imgs || []).join(', ');
+      document.getElementById('listDesc').value = item.d || '';
+      document.getElementById('formTitle').textContent = 'Editando imóvel ' + item.c;
+      renderThumbsFromImgsField();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function renderThumbsFromImgsField() {
+      var names = document.getElementById('listImgs').value.split(',').map(function (x) { return x.trim(); }).filter(Boolean);
+      document.getElementById('thumbs').innerHTML = names.map(function (n) {
+        return '<img src="' + fotoUrl(n) + '" alt="">';
+      }).join('');
+    }
+
+    async function uploadPhotos() {
+      var input = document.getElementById('listPhotoFile');
+      var status = document.getElementById('uploadStatus');
+      var code = document.getElementById('listCode').value.trim();
+      if (!input.files.length) { status.textContent = 'Escolha ao menos um arquivo.'; return; }
+      if (!code) { status.textContent = 'Preencha o código do imóvel antes de enviar fotos.'; return; }
+
+      var formData = new FormData();
+      formData.append('code', code);
+      for (var i = 0; i < input.files.length; i++) formData.append('files', input.files[i]);
+
+      status.textContent = 'Enviando...';
+      try {
+        var res = await api('/api/upload', { method: 'POST', body: formData });
+        var current = document.getElementById('listImgs').value.split(',').map(function (x) { return x.trim(); }).filter(Boolean);
+        var updated = current.concat(res.filenames || []);
+        document.getElementById('listImgs').value = updated.join(', ');
+        renderThumbsFromImgsField();
+        input.value = '';
+        status.textContent = (res.filenames || []).length + ' foto(s) enviada(s).';
+      } catch (e) {
+        status.textContent = 'Erro ao enviar: ' + e.message;
+      }
+    }
+
+    async function saveListing() {
+      var status = document.getElementById('saveStatus');
+      var code = document.getElementById('listCode').value.trim();
+      var type = document.getElementById('listType').value.trim();
+      var name = document.getElementById('listName').value.trim();
+      if (!code || !type || !name) {
+        status.textContent = 'Preencha ao menos código, tipo e nome.';
+        return;
+      }
+
+      var listing = {
+        c: code,
+        t: type,
+        n: name,
+        l: document.getElementById('listLocation').value.trim(),
+        p: document.getElementById('listPrice').value,
+        a: document.getElementById('listArea').value.trim(),
+        q: document.getElementById('listQuartos').value,
+        b: document.getElementById('listBanheiros').value,
+        v: document.getElementById('listVagas').value,
+        lat: document.getElementById('listLat').value,
+        lng: document.getElementById('listLng').value,
+        imgs: document.getElementById('listImgs').value.split(',').map(function (x) { return x.trim(); }).filter(Boolean),
+        d: document.getElementById('listDesc').value
+      };
+
+      status.textContent = 'Salvando e publicando...';
+      try {
+        await api('/api/listings', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ listing: listing }) });
+        status.textContent = '';
+        banner('Imóvel salvo! O Cloudflare vai publicar a mudança em 1-2 minutos.', 'info');
+        clearListingForm();
+        await loadListings();
+      } catch (e) {
+        status.textContent = '';
+        banner('Erro ao salvar: ' + e.message, 'error');
+      }
+    }
+
+    async function deleteListing(code) {
+      if (!confirm('Tem certeza que deseja apagar o imóvel ' + code + '? Essa ação publica a remoção no site.')) return;
+      try {
+        await api('/api/listings?code=' + encodeURIComponent(code), { method: 'DELETE' });
+        banner('Imóvel removido. O Cloudflare vai publicar a mudança em 1-2 minutos.', 'info');
+        await loadListings();
+      } catch (e) {
+        banner('Erro ao remover: ' + e.message, 'error');
+      }
+    }
+
+    document.getElementById('listImgs').addEventListener('input', renderThumbsFromImgsField);
+    document.getElementById('pass').addEventListener('keypress', function (e) { if (e.key === 'Enter') doLogin(); });
+
+    (async function init() {
+      try {
+        var session = await api('/api/session');
+        if (session.authenticated) {
+          showView('panel');
+          await loadListings();
+          return;
+        }
+      } catch (e) {}
+      showView('login');
+    })();
+  </script>
+</body>
+</html>
