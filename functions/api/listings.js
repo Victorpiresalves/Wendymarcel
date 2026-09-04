@@ -48,7 +48,6 @@ export async function onRequestGet({ request, env }) {
     const listings = JSON.parse(file.content);
     return json({ listings });
   } catch (e) {
-    console.error('listings GET failed:', e.stack || e.message || e);
     return json({ error: String(e.message || e) }, 502);
   }
 }
