@@ -42,7 +42,10 @@ export async function onRequestGet({ request, env }) {
   if (!(await requireAuth(request, env))) return json({ error: 'Não autenticado.' }, 401);
   try {
     const file = await getFile(env, 'imoveis-data.json');
-    const listings = file ? JSON.parse(file.content) : [];
+    if (!file) {
+      return json({ error: 'imoveis-data.json não encontrado no repositório (verifique GITHUB_TOKEN/GITHUB_OWNER/GITHUB_REPO/GITHUB_BRANCH no Cloudflare Pages — um token expirado ou sem permissão faz a API do GitHub responder 404).' }, 502);
+    }
+    const listings = JSON.parse(file.content);
     return json({ listings });
   } catch (e) {
     return json({ error: String(e.message || e) }, 502);
